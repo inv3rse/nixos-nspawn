@@ -298,9 +298,13 @@ in
   };
 
   config = lib.mkIf (lib.length (lib.attrNames cfg.containers) > 0) {
-    networking = {
+    networking = 
+      let
+        fwBackend = config.networking.firewall.backend;
+      in
+      {
       useNetworkd = true;
-      firewall.interfaces = lib.genAttrs [ "ve-+" "vz-+" ] (_: {
+      firewall.interfaces = lib.genAttrs (if fwBackend == "nftables" then [ "ve-*" "vz-*" ] else [ "ve-+" "vz-+" ]) (_: {
         allowedTCPPorts = [
           5353 # MDNS
         ];
