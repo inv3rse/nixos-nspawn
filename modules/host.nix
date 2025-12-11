@@ -250,11 +250,7 @@ let
           "/nix/store" = {
             hostPath = "/nix/store";
             readOnly = true;
-            # FIXME: This should be mounted with an idmap so the nix store is
-            # owned by root. Setting an idmap fails for some reason, though.
-            # Due to this, logrotate currently fails because it requires
-            # configuration files to be owned by root. See container.nix.
-            options = [ "noidmap" ];
+            options = [ "idmap" ];
           };
         };
       };
